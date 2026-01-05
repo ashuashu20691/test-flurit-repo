@@ -1,0 +1,34 @@
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform lock file (regenerated on init)
+.terraform.lock.hcl
+
+# Terraform working directory
+.terraform/
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Sensitive variable files (keep terraform.tfvars tracked for defaults)
+*.auto.tfvars
+*.auto.tfvars.json
+secret.tfvars
+secrets.tfvars
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
