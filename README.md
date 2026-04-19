@@ -1,328 +1,340 @@
-# diet-planner-infrastructure
+# Terraform Infrastructure
 
-Infrastructure for Diet Planner application including VPC, ECS (EC2), RDS SQL Server, MongoDB on EC2, and S3/CloudFront frontend.
+## Requirements
 
-## Prerequisites
+The following requirements are needed by this module:
 
-Before deploying this infrastructure, ensure you have:
+- [terraform](#requirement_terraform) (>= 1.5.0)
 
-- [Terraform](https://www.terraform.io/downloads) >= 1.14.0 installed
-- AWS CLI configured with appropriate credentials
-- AWS account with permissions to create the required resources
+- [aws](#requirement_aws) (~> 5.0)
 
-## Project Structure
+## Providers
 
-```
-.
-├── modules/                    # Reusable module wrappers
-│   └── vpc/
-│       ├── main.tf           # Calls terraform-aws-modules/vpc/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── sg-alb/
-│       ├── main.tf           # Calls terraform-aws-modules/security-group/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── sg-ecs/
-│       ├── main.tf           # Calls terraform-aws-modules/security-group/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── sg-rds/
-│       ├── main.tf           # Calls terraform-aws-modules/security-group/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── sg-mongodb/
-│       ├── main.tf           # Calls terraform-aws-modules/security-group/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── rds/
-│       ├── main.tf           # Calls terraform-aws-modules/rds/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── mongodb/
-│       ├── main.tf           # Calls terraform-aws-modules/ec2-instance/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── alb/
-│       ├── main.tf           # Calls terraform-aws-modules/alb/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── autoscaling/
-│       ├── main.tf           # Calls terraform-aws-modules/autoscaling/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── ecs/
-│       ├── main.tf           # Calls terraform-aws-modules/ecs/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── s3-frontend/
-│       ├── main.tf           # Calls terraform-aws-modules/s3-bucket/aws
-│       ├── variables.tf
-│       └── outputs.tf
-│   └── cloudfront/
-│       ├── main.tf           # Calls terraform-aws-modules/cloudfront/aws
-│       ├── variables.tf
-│       └── outputs.tf
-├── environments/               # Environment-specific configurations
-│   └── dev/
-├── README.md
-└── .gitignore
-```
+The following providers are used by this module:
+
+- [aws](#provider_aws) (~> 5.0)
 
 ## Modules
 
-This infrastructure uses the following Terraform Registry modules:
+No modules.
 
-### vpc
+## Resources
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/vpc/aws`](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws) |
-| Version | `6.5.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+The following resources are used by this module:
 
-**Purpose:** VPC with public, private, and database subnets
+- [aws_apigatewayv2_api.http_api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_api) (resource)
+- [aws_apigatewayv2_integration.api_integration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration) (resource)
+- [aws_apigatewayv2_route.api_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_route) (resource)
+- [aws_apigatewayv2_stage.api_stage](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_stage) (resource)
+- [aws_apigatewayv2_vpc_link.api_vpc_link](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_vpc_link) (resource)
+- [aws_cloudfront_distribution.cdn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) (resource)
+- [aws_cloudfront_origin_access_control.oac](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_access_control) (resource)
+- [aws_cloudwatch_log_group.ecs_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) (resource)
+- [aws_db_instance.oracle_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) (resource)
+- [aws_db_instance.postgres_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) (resource)
+- [aws_db_subnet_group.oracle_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) (resource)
+- [aws_db_subnet_group.postgres_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) (resource)
+- [aws_ecs_cluster.main_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster) (resource)
+- [aws_ecs_service.app_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) (resource)
+- [aws_ecs_task_definition.app_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) (resource)
+- [aws_eip.nat_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) (resource)
+- [aws_elasticache_cluster.redis_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_cluster) (resource)
+- [aws_elasticache_subnet_group.redis_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) (resource)
+- [aws_iam_role.ecs_execution_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) (resource)
+- [aws_iam_role_policy_attachment.ecs_execution_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) (resource)
+- [aws_internet_gateway.igw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) (resource)
+- [aws_lb.ecs_alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) (resource)
+- [aws_lb_listener.ecs_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) (resource)
+- [aws_lb_target_group.ecs_tg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) (resource)
+- [aws_nat_gateway.main_nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) (resource)
+- [aws_route.private_nat_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) (resource)
+- [aws_route.public_internet_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) (resource)
+- [aws_route_table.private_rt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) (resource)
+- [aws_route_table.public_rt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) (resource)
+- [aws_route_table_association.private_1_assoc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) (resource)
+- [aws_route_table_association.private_2_assoc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) (resource)
+- [aws_route_table_association.public_1_assoc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) (resource)
+- [aws_route_table_association.public_2_assoc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) (resource)
+- [aws_s3_bucket.assets_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) (resource)
+- [aws_s3_bucket_policy.assets_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) (resource)
+- [aws_s3_bucket_public_access_block.assets_pab](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) (resource)
+- [aws_s3_bucket_versioning.assets_versioning](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) (resource)
+- [aws_security_group.ecs_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) (resource)
+- [aws_security_group.oracle_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) (resource)
+- [aws_security_group.postgres_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) (resource)
+- [aws_security_group.redis_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) (resource)
+- [aws_subnet.private_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) (resource)
+- [aws_subnet.private_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) (resource)
+- [aws_subnet.public_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) (resource)
+- [aws_subnet.public_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) (resource)
+- [aws_vpc.main_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) (resource)
+- [aws_vpc_security_group_egress_rule.ecs_egress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_egress_rule) (resource)
+- [aws_vpc_security_group_ingress_rule.oracle_ingress_ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule) (resource)
+- [aws_vpc_security_group_ingress_rule.postgres_ingress_ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule) (resource)
+- [aws_vpc_security_group_ingress_rule.redis_ingress_ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule) (resource)
 
-### sg-alb
+## Required Inputs
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/security-group/aws`](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws) |
-| Version | `5.3.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+The following input variables are required:
 
-**Purpose:** Security Group for ALB
+### [api_gateway_access_log_group_arn](#input_api_gateway_access_log_group_arn)
 
-### sg-ecs
+Description: The ARN of the CloudWatch Log Group for API Gateway access logs.
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/security-group/aws`](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws) |
-| Version | `5.3.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Type: `string`
 
-**Purpose:** Security Group for ECS Nodes
+## Optional Inputs
 
-### sg-rds
+The following input variables are optional (have default values):
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/security-group/aws`](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws) |
-| Version | `5.3.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+### [assets_bucket_name](#input_assets_bucket_name)
 
-**Purpose:** Security Group for RDS SQL Server
+Description: The name of the S3 bucket for static assets.
 
-### sg-mongodb
+Type: `string`
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/security-group/aws`](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws) |
-| Version | `5.3.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Default: `"my-app-assets-unique-id"`
 
-**Purpose:** Security Group for MongoDB EC2
+### [az_1](#input_az_1)
 
-### rds
+Description: The first availability zone to use.
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/rds/aws`](https://registry.terraform.io/modules/terraform-aws-modules/rds/aws) |
-| Version | `7.0.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Type: `string`
 
-**Purpose:** RDS SQL Server Instance
+Default: `"us-east-1a"`
 
-### mongodb
+### [az_2](#input_az_2)
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/ec2-instance/aws`](https://registry.terraform.io/modules/terraform-aws-modules/ec2-instance/aws) |
-| Version | `6.1.5` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Description: The second availability zone to use.
 
-**Purpose:** EC2 Instance for MongoDB
+Type: `string`
 
-### alb
+Default: `"us-east-1b"`
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/alb/aws`](https://registry.terraform.io/modules/terraform-aws-modules/alb/aws) |
-| Version | `10.4.0` |
-| Publisher | terraform-aws-modules ✅ Verified |
+### [container_image](#input_container_image)
 
-**Purpose:** Application Load Balancer
+Description: The Docker image to use for the container.
 
-### autoscaling
+Type: `string`
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/autoscaling/aws`](https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws) |
-| Version | `8.0.0` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Default: `"nginx:latest"`
 
-**Purpose:** Auto Scaling Group for ECS Capacity Provider
+### [container_port](#input_container_port)
 
-### ecs
+Description: The port the container listens on.
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/ecs/aws`](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws) |
-| Version | `6.11.0` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Type: `number`
 
-**Purpose:** ECS Cluster and Service
+Default: `80`
 
-### s3-frontend
+### [db_allocated_storage](#input_db_allocated_storage)
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/s3-bucket/aws`](https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws) |
-| Version | `5.9.1` |
-| Publisher | terraform-aws-modules ✅ Verified |
+Description: The allocated storage in gigabytes for the PostgreSQL RDS instance.
 
-**Purpose:** S3 Bucket for Frontend
+Type: `number`
 
-### cloudfront
+Default: `20`
 
-| Property | Value |
-|----------|-------|
-| Source | [`terraform-aws-modules/cloudfront/aws`](https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws) |
-| Version | `6.0.2` |
-| Publisher | terraform-aws-modules ✅ Verified |
+### [db_instance_class](#input_db_instance_class)
 
-**Purpose:** CloudFront Distribution
+Description: The instance type of the PostgreSQL RDS instance.
 
-## Additional Resources
+Type: `string`
 
-The following resources are created directly (no suitable module available):
+Default: `"db.t3.micro"`
 
-| Resource | Type | Reason |
-|----------|------|--------|
-| `ecs_ami` | `aws_ssm_parameter` | Need to fetch the latest ECS optimized AMI for the region |
+### [db_name](#input_db_name)
 
-## Deployment
+Description: The name of the database to create when the PostgreSQL RDS instance is created.
 
-### Quick Start
+Type: `string`
 
-```bash
-# Navigate to the desired environment
-cd environments/dev
+Default: `"myappdb"`
 
-# Initialize Terraform (downloads providers and modules)
-terraform init
+### [db_username](#input_db_username)
 
-# Review the execution plan
-terraform plan
+Description: Username for the master DB user.
 
-# Apply the configuration
-terraform apply
-```
+Type: `string`
 
-### Deploying to Different Environments
+Default: `"dbadmin"`
 
-Each environment has its own configuration in `environments/<env>/`:
+### [ecs_cluster_name](#input_ecs_cluster_name)
 
-```bash
-# Development
-cd environments/dev && terraform init && terraform apply
-```
+Description: The name of the ECS cluster.
 
-## Variables Reference
+Type: `string`
 
-| Name | Type | Description | Required | Default |
-|------|------|-------------|----------|---------|
-| `project_name` | `string` | Project name prefix | No | `"diet-planner"` |
-| `region` | `string` | AWS Region | No | `"us-east-1"` |
-| `db_username` | `string` | Database username | No | `"admin"` |
+Default: `"app-cluster"`
 
-🔒 = Sensitive variable
+### [ecs_service_desired_count](#input_ecs_service_desired_count)
+
+Description: The desired number of instances for the ECS service.
+
+Type: `number`
+
+Default: `2`
+
+### [environment](#input_environment)
+
+Description: The deployment environment (e.g., dev, staging, prod).
+
+Type: `string`
+
+Default: `"dev"`
+
+### [log_retention_days](#input_log_retention_days)
+
+Description: The number of days to retain CloudWatch logs.
+
+Type: `number`
+
+Default: `30`
+
+### [oracle_instance_class](#input_oracle_instance_class)
+
+Description: The instance type of the Oracle RDS instance.
+
+Type: `string`
+
+Default: `"db.t3.medium"`
+
+### [private_subnet_1_cidr](#input_private_subnet_1_cidr)
+
+Description: CIDR block for the first private subnet.
+
+Type: `string`
+
+Default: `"10.0.10.0/24"`
+
+### [private_subnet_2_cidr](#input_private_subnet_2_cidr)
+
+Description: CIDR block for the second private subnet.
+
+Type: `string`
+
+Default: `"10.0.11.0/24"`
+
+### [project_name](#input_project_name)
+
+Description: The name of the project used for resource naming and tagging.
+
+Type: `string`
+
+Default: `"my-app"`
+
+### [public_subnet_1_cidr](#input_public_subnet_1_cidr)
+
+Description: CIDR block for the first public subnet.
+
+Type: `string`
+
+Default: `"10.0.1.0/24"`
+
+### [public_subnet_2_cidr](#input_public_subnet_2_cidr)
+
+Description: CIDR block for the second public subnet.
+
+Type: `string`
+
+Default: `"10.0.2.0/24"`
+
+### [redis_node_type](#input_redis_node_type)
+
+Description: The compute and memory capacity of the nodes in the Redis cluster.
+
+Type: `string`
+
+Default: `"cache.t3.micro"`
+
+### [region](#input_region)
+
+Description: The AWS region where resources will be deployed.
+
+Type: `string`
+
+Default: `"us-east-1"`
+
+### [task_cpu](#input_task_cpu)
+
+Description: The number of CPU units used by the task.
+
+Type: `number`
+
+Default: `256`
+
+### [task_memory](#input_task_memory)
+
+Description: The amount of memory (in MiB) used by the task.
+
+Type: `number`
+
+Default: `512`
+
+### [vpc_cidr](#input_vpc_cidr)
+
+Description: The CIDR block for the VPC.
+
+Type: `string`
+
+Default: `"10.0.0.0/16"`
 
 ## Outputs
 
-After successful deployment, the following outputs will be available:
+The following outputs are exported:
 
-| Name | Description |
-|------|-------------|
-| `vpc_id` | VPC ID |
-| `alb_dns_name` | ALB DNS Name |
-| `rds_endpoint` | RDS Endpoint |
-| `mongodb_ip` | MongoDB Private IP |
-| `cloudfront_domain` | CloudFront Domain |
+### [alb_dns_name](#output_alb_dns_name)
 
-Access outputs after deployment:
+Description: The DNS name of the load balancer.
 
-```bash
-terraform output
+### [api_gateway_endpoint](#output_api_gateway_endpoint)
 
-# Get a specific output
-terraform output vpc_id
-```
+Description: The endpoint of the HTTP API Gateway.
 
-## Cleanup
+### [cloudfront_domain_name](#output_cloudfront_domain_name)
 
-To destroy all resources created by this configuration:
+Description: The domain name corresponding to the CloudFront distribution.
 
-```bash
-cd environments/<env>
-terraform destroy
-```
+### [ecs_cluster_arn](#output_ecs_cluster_arn)
 
-⚠️ **Warning:** This will permanently delete all resources. Review the plan carefully before confirming.
+Description: The ARN of the ECS cluster.
 
-## CI/CD with GitHub Actions
+### [ecs_service_name](#output_ecs_service_name)
 
-This project includes a GitHub Actions workflow for automated infrastructure deployment.
+Description: The name of the ECS service.
 
-### Workflow Location
+### [oracle_db_endpoint](#output_oracle_db_endpoint)
 
-```
-.github/workflows/terraform-provision.yml
-```
+Description: The connection endpoint for the Oracle database.
 
-### Required GitHub Secrets & Variables
+### [postgres_db_endpoint](#output_postgres_db_endpoint)
 
-Configure these in your repository: **Settings → Secrets and variables → Actions**
+Description: The connection endpoint for the PostgreSQL database.
 
-#### AWS Configuration
+### [private_subnet_ids](#output_private_subnet_ids)
 
-| Type | Name | Description | Required |
-|------|------|-------------|----------|
-| Secret | `AWS_IAC_ROLE_ARN` | IAM role ARN for GitHub OIDC authentication | ✅ Yes |
-| Variable | `AWS_REGION` | AWS region for deployment (default: us-east-1) | No |
+Description: List of IDs of private subnets.
 
-#### AWS Setup Steps
+### [public_subnet_ids](#output_public_subnet_ids)
 
-1. **Create GitHub OIDC Provider** (one-time per AWS account):
-   ```bash
-   aws iam create-open-id-connect-provider \
-     --url https://token.actions.githubusercontent.com \
-     --client-id-list sts.amazonaws.com \
-     --thumbprint-list 6938fd4d98bab03faadb97b34396831e3780aea1
-   ```
+Description: List of IDs of public subnets.
 
-2. **Create IAM Role** with trust policy for your repository
+### [redis_endpoint](#output_redis_endpoint)
 
-3. **Attach Permissions** - the role needs permissions for all resources in this project
+Description: The DNS name of the Redis cache node.
 
-4. **Add Secret to GitHub**:
-   ```bash
-   gh secret set AWS_IAC_ROLE_ARN --body "arn:aws:iam::ACCOUNT_ID:role/YourRoleName"
-   ```
+### [s3_bucket_name](#output_s3_bucket_name)
 
-📚 [Full AWS OIDC Setup Guide](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
+Description: The name of the assets S3 bucket.
 
-### Running the Workflow
+### [vpc_id](#output_vpc_id)
 
-The workflow can be triggered:
-- **Automatically** on push to `main` branch
-- **Manually** via GitHub Actions UI (workflow_dispatch)
+Description: The ID of the VPC.
+
+## Usage
 
 ```bash
-# Trigger manually via GitHub CLI
-gh workflow run terraform-provision.yml -f environment=dev
+terraform init
+terraform plan
+terraform apply
 ```
-
----
-
-*Generated by [Flurit AI](https://www.flurit.ai)*
